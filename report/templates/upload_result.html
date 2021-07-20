@@ -1,0 +1,55 @@
+ {% extends "base.html" %}
+{% block content %}
+<h3> {{current_user.username}}'s class </h3>
+    {% if student %}
+    {% for each in student %}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">  
+            
+            <h5 class="card-title">{{each.username}}</h5>
+            
+            <hr class="solid">
+            <div class="form-check form-switch"> 
+                <!-- add to upload the result file here -->
+                <form method="post"   action="#" enctype="multipart/form-data"> 
+                    {{form.hidden_tag()}}
+                    <input type="hidden" name="student_id" value="{{each.id}}" />
+                        {% if form.resultFile.errors %}
+                            {{form.resultFile(class="is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.resultFile.errors %}
+                                        <span class="is-invalid">
+                                            {{error}}
+                                        </span> 
+                                    {% endfor %}
+                                    {{form.submit(class = "btn btn-primary")}}          
+                                </div>
+                            {% else %}
+                                {% if each.fileName %}
+                                {{form.resultFile}}
+                                
+                                <a href="{{url_for('download', getId = each.id, attach = False)}}" method>view current file</a>
+                                    <label>Upload new file</label>
+                                    {{form.submit(class = "btn btn-danger")}}
+                                  
+                                
+                                {% else %}
+                                    
+                                    <label>result not added</label>
+                                    {{form.resultFile}}
+                                    {{form.submit(class = "btn btn-primary")}}
+                                {% endif %}
+
+                            {% endif %}
+            </form> 
+
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% else %}
+    <h1 class="center"> No one here yet</h1>
+    {% endif %}
+{% endblock %} 
+

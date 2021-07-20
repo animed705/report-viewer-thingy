@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form class="d-flex"  name="search" method="post" action="{{url_for('admin')}}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <input class="form-control me-2" type="search" placeholder="Enter the username to search" aria-label="Search" name="admin" >
+    <button class="btn btn-outline-success" type="submit">Search</button>
+  
+  {% if result %}
+  
+  <table class ="table">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">User Type</th>
+            <th scope="col">Class</th>
+          </tr>
+        </thead>
+    
+            <tbody>
+                <tr>
+                  <th scope="row">
+                <form method="post", action="#">
+                    <!-- add form -->
+                    {{form.csrf_token}}
+                    {{form.hidden_tag()}}
+                    
+                    {% if form.username.errors %}
+                    {{form.username(class="is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                              <span class="is-invalid">
+                                {{error}}
+                              </span> 
+                              {% endfor %}
+    
+                        </div>
+                    {% else %}
+                       {{form.username}}
+                    {% endif %}</th>
+
+                  <td>
+                    
+                    {% if form.userType.errors %}
+                    {{form.userType(class="is-invalid")}}
+                        <div class="invalid-feedback">
+                        {% for error in form.userType.errors %}
+                          <span class="is-invalid">
+                            {{error}}
+                          </span> 
+                          {% endfor %}
+
+                        </div>
+                        {% else %}
+                        {{form.userType}}
+                        {% endif %}
+                </td>
+
+                  <td>
+                
+                    {% if form.theClass.errors %}
+                    {{form.theClass(class="is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.theClass.errors %}
+                              <span class="is-invalid">
+                                {{error}}
+                              </span> 
+                              {% endfor %}
+    
+                            </div>
+                            {% else %}
+                            {{form.theClass}}
+                            {% endif %}
+                    </td>
+                    <td>
+                      <input type="hidden" name = "usrId" value="{{result.id}}">
+                        {{form.submit(class = "btn btn-outline-primary")}}
+                    </td>
+                </tr>
+
+              </form>
+            </tbody>
+          </table>
+  
+  {% else %}
+    <h1>Nothing found</h1>
+  {% endif %}
+{% endblock %}
